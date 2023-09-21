@@ -22,6 +22,7 @@ function App() {
     <>
       <header>
         <h2>Buscador de películas</h2>
+        <h4>Hecho por Sergio Dacal Rodríguez</h4>
         <form className='form' onSubmit={handleSubmit}>
           <input 
             autoComplete="off" 
