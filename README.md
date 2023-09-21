@@ -5,7 +5,6 @@ Crea una aplicación para buscar películas
 API para usar:
 
 - https://www.omdbapi.com/
-- API_KEY: 4287ad07
 
 Requerimientos:
 
