@@ -1,6 +1,7 @@
 import { API_ENDPOINT } from '../constants'
 
 export async function searchMovies ({title}) {
+
   if(title === '') return null
 
   try{

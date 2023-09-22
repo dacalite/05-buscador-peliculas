@@ -1,21 +1,31 @@
 import './App.css'
+import { useState } from 'react'
 import { Movies } from './components/Movies'
 import { useMovies } from './hooks/useMovies'
 import { useSearch } from './hooks/useSearch'
+import debounce from 'just-debounce-it'
+import { useCallback } from 'react'
 
 function App() {
+  const [sortByYear, setSortByYear] = useState(false)
   const {search, setSearch, error} = useSearch()
-  const {movies, getMovies} = useMovies({search})
+  const {movies, getMovies, loading} = useMovies({sortByYear})
+  const debounceSearch = useCallback(
+    debounce(({search}) => {
+      getMovies({search})
+    }, 500)
+    , [getMovies])
 
   const handleChange = (event) => {
     const newQuery = event.target.value
     if(newQuery.startsWith(' ')) return
     setSearch(event.target.value)
+    debounceSearch({search: newQuery})
   }
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    getMovies()
+    getMovies({search})
   }
 
   return (
@@ -35,12 +45,22 @@ function App() {
               border: '2px solid transparent',
               borderColor: error ? 'red' : 'transparent'
             }}/>
+            <label>
+              Ordenar
+              <input type="checkbox" checked={sortByYear} onChange={() => {setSortByYear(!sortByYear)}} />
+            </label>
           <button type='submit'>Buscar</button>
         </form>
+        <p style={{color: 'red'}}>{error}</p>
       </header>
       <main>
-          <p style={{color: 'red'}}>{error}</p>
-          <Movies moviesList={movies}/>
+        {
+          loading ? (
+            <p>Cargando ...</p>
+          ):(
+            <Movies moviesList={movies}/>
+          )
+        }
       </main>
     </>
   )
